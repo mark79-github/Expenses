@@ -3,11 +3,21 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const {msg} = require('../config/constants');
 
-function getUserById(userId) {
-    return User.findById(userId);
-}
-
 function getById(userId) {
+
+    // return User.aggregate([{
+    //     $project: {
+    //         username: 1, amount: 1, expenses: 1,
+    //         expensesCount: {
+    //             $size: '$expenses'
+    //         },
+    //         totalAmount: {
+    //             $sum: '$expenses.total'
+    //         }
+    //     }
+    // }]);
+
+
     return User
         .findById(userId)
         .populate('expenses')
@@ -20,6 +30,7 @@ function getById(userId) {
             x.amount = x.amount.toFixed(2);
             return x;
         });
+
 }
 
 function reFill(userId, data) {
@@ -41,7 +52,6 @@ function register(data) {
             if (user) {
                 throw {message: msg.USERNAME_IS_IN_USE(username)}
             }
-
             return new User({username, password, amount}).save();
         });
 }
@@ -68,9 +78,8 @@ function login(data) {
 }
 
 module.exports = {
+    getById,
     register,
     login,
-    getById,
     reFill,
-    getUserById,
 }

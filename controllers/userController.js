@@ -33,7 +33,7 @@ router.get('/register', isGuest, (req, res) => {
 router.post('/register', isGuest, validate.user.register, (req, res) => {
     userService.register(req.body)
         .then(() => {
-            return userService.login(req.body)
+            return userService.login(req.body);
         })
         .then((token) => {
             if (!token) {
@@ -54,7 +54,8 @@ router.get('/logout', isLogged, (req, res) => {
 });
 
 router.get('/profile', isLogged, (req, res, next) => {
-    userService.getById(req.user.id)
+    const userId = req.user.id;
+    userService.getById(userId)
         .then((user) => {
             res.render('users/profile', {...user});
         })

@@ -10,19 +10,14 @@ router.get('/create', (req, res) => {
 });
 
 router.post('/create', validate.expense.create, (req, res, next) => {
-
-        const userId = req.user.id;
-        expenseService.create(req.body, userId)
-            .then((expense) => {
-                return User.updateOne({_id: userId}, {$push: {expenses: expense._id}});
-            })
-            .then(() => {
-                res.redirect('/');
-            })
-            .catch(next);
-
-    }
-);
+    const userId = req.user.id;
+    console.log('userId', userId);
+    expenseService.create(req.body, userId)
+        .then(() => {
+            res.redirect('/');
+        })
+        .catch(next);
+});
 
 router.get('/details/:expenseId', (req, res, next) => {
     const expenseId = req.params.expenseId;

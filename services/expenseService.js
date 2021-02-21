@@ -1,8 +1,4 @@
-const {Expense} = require('../models');
-
-function remove(expenseId) {
-    return Expense.findByIdAndDelete(expenseId);
-}
+const {Expense, User} = require('../models');
 
 function getById(expenseId) {
     return Expense
@@ -19,18 +15,29 @@ function getAll(userId) {
         .lean();
 }
 
+function remove(expenseId) {
+    return Expense.findByIdAndDelete(expenseId);
+}
+
 function create(data, userId) {
 
     let {merchant, total, category, description, report} = data;
     report = !!report;
 
-    const expense = new Expense({merchant, total, category, description, report, user: userId});
-    return expense.save();
+    return User.findById(userId)
+        .then(user => {
+            const expense = new Expense({merchant, total, category, description, report, user: userId});
+            return Promise.all([user, expense.save()]);
+        }).then(([u, e]) => {
+            u.expenses.push(e._id);
+            return u.save();
+        });
+
 }
 
 module.exports = {
-    create,
-    getAll,
     getById,
+    getAll,
+    create,
     remove,
 }

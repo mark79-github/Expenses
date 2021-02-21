@@ -9,6 +9,7 @@
     <div class="form-control">
         <label for="total">Total*</label>
         <input id="total" type="text" placeholder="123.00" name="total" value="{{total}}">
+        <label for="vault"></label>
         <select name="vault" id="vault">
             <option value="bgn">BGN лв</option>
         </select>
@@ -52,8 +53,8 @@
     </div>
 
     <button type="Submit">Save</button>
-
 </form>
+
 <script>
     document.querySelector(`option[value="{{category}}"]`).setAttribute("selected", "true");
 </script>
