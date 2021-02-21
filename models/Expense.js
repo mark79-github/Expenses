@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const expenseSchema = new mongoose.Schema({
     merchant: {
         type: String,
@@ -28,7 +27,6 @@ const expenseSchema = new mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
-        // required: true,
     }
 });
 

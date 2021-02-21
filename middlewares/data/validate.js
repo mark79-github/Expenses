@@ -79,9 +79,6 @@ module.exports = {
     },
     expense: {
         create(req, res, next) {
-
-            console.log(req.body);
-
             const {merchant, total, category, description} = req.body;
 
             let expense = {
@@ -102,6 +99,8 @@ module.exports = {
 
             if (!category) {
                 expense.errors.push(msg.CATEGORY_INVALID);
+            }else{
+                expense.category = category;
             }
 
             if (description.trim().length === 0 || description.trim().length < constants.DESCRIPTION_MIN_LENGTH || description.trim().length > constants.DESCRIPTION_MAX_LENGTH) {

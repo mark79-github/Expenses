@@ -9,6 +9,9 @@ router.get('/', (req, res, next) => {
         const userId = req.user.id;
         expenseService.getAll(userId)
             .then((expenses) => {
+                expenses.forEach(x => {
+                    x.total = x.total.toFixed(2);
+                })
                 res.render('home/home', {expenses});
             })
             .catch(next);

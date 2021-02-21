@@ -10,7 +10,7 @@ const dbConnectionOptions = {
 }
 
 mongoose.connect(config.DB, dbConnectionOptions)
-    .then((res) => console.log(msg.DB_CONNECTED(res.connections[0].host, res.connections[0].name)))
+    .then((res) => console.log(msg.DB_CONNECTED(res.connections[0].host, res.connections[0].name, config.PORT)))
     .catch(console.warn.bind(console, msg.DB_CONNECTION_ERROR));
 
 module.exports = mongoose.connection;

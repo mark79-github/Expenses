@@ -31,14 +31,11 @@ router.get('/register', isGuest, (req, res) => {
 });
 
 router.post('/register', isGuest, validate.user.register, (req, res) => {
-    // // register + login
-    console.log(req.body);
     userService.register(req.body)
         .then(() => {
             return userService.login(req.body)
         })
         .then((token) => {
-            console.log('token', token);
             if (!token) {
                 throw {message: msg.WRONG_CREDENTIALS};
             }
@@ -49,16 +46,6 @@ router.post('/register', isGuest, validate.user.register, (req, res) => {
         .catch(error => {
             res.render('users/register', {message: error.message});
         });
-
-    // only register
-    // userService.register(req.body)
-    //     .then(() => {
-    //         res.redirect('/users/login');
-    //     })
-    //     .catch(error => {
-    //         res.render('users/register', {message: error.message});
-    //     });
-
 });
 
 router.get('/logout', isLogged, (req, res) => {

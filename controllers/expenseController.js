@@ -28,7 +28,6 @@ router.get('/details/:expenseId', (req, res, next) => {
     const expenseId = req.params.expenseId;
     expenseService.getById(expenseId)
         .then((expense) => {
-            console.log(expense);
             res.render('expenses/details', {...expense});
         })
         .catch(next);

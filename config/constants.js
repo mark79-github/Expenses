@@ -14,15 +14,15 @@ module.exports = {
         MERCHANT_MIN_LENGTH: "Merchant must be at least 4 characters",
         USERNAME_ONLY_ALPHABETICAL: "Username must contains only digits and/or latin letters",
         CONFIRMATION_PASSWORD_ERROR: "Both passwords should be the same ...",
-        AMOUNT_INVALID: "Amount must be a positive number",
+        AMOUNT_INVALID: "Amount must be a positive number or empty",
         TOTAL_INVALID: "Total must be a positive number",
         CATEGORY_INVALID: "Category must be selected",
         WRONG_CREDENTIALS: "Wrong username or password",
         USERNAME_IS_IN_USE: (username) => {
             return `Username "${username}" is already in use ...`
         },
-        DB_CONNECTED: (host, name) => {
-            return `Successfully connected to ${host} : db -> ${name}`
+        DB_CONNECTED: (host, name, port) => {
+            return `Successfully connected to http://${host}:${port}  /database:${name}/`
         },
         DB_CONNECTION_ERROR: "Connection error: ",
         APPLICATION_RUNNING: (port) => {
