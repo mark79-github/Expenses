@@ -16,7 +16,7 @@
 
     <div class="form-control">
         <label for="category">Category*</label>
-        <select name="category" id="category">
+        <select name="category" id="category" value="{{category}}">
             <option disabled selected value="default">Select category...</option>
             <option value="advertising">Advertising</option>
             <option value="benefits">Benefits</option>
@@ -48,12 +48,12 @@
 
     <div class="form-control">
         <label for="report">Report: </label>
-        <input type="checkbox" id="report" name="report" value="{{report}}">
+        <input type="checkbox" id="report" name="report">
     </div>
-
-<!--    <input type="checkbox" name="isPublic" id="check-box" {{#if isPublic}}checked{{/if}}>-->
-<!--    <label for="check-box">Public</label>-->
 
     <button type="Submit">Save</button>
 
 </form>
+<script>
+    document.querySelector(`option[value="{{category}}"]`).setAttribute("selected", "true");
+</script>

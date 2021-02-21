@@ -1,8 +1,8 @@
 {{#if isLogged}}
     <section class="actions">
-        <form method="post">
+        <form action="/users/fill" method="post">
             <h2>Salary time? Refill your account amount.</h2>
-            <input type="text" id="refill-amount">
+            <input type="text" id="refill-amount" name="amount">
             <button type="submit">Refill</button>
         </form>
         <div>

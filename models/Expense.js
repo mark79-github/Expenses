@@ -5,6 +5,7 @@ const expenseSchema = new mongoose.Schema({
     merchant: {
         type: String,
         required: true,
+        minlength: 4,
     },
     total: {
         type: Number,

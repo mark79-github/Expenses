@@ -1,9 +1,11 @@
 <tr>
     <td>
         <p>{{merchant}}</p>
-        <div class="report">
-            <a href="/expenses/details/{{_id}}">Report</a>
-        </div>
+        {{#if report}}
+            <div class="report">
+                <a href="/expenses/details/{{_id}}">Report</a>
+            </div>
+        {{/if}}
     </td>
     <td>
         <img src="/images/amount.png" alt="amount">

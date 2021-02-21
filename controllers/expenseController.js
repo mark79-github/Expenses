@@ -1,5 +1,7 @@
 const {Router} = require('express');
 const {expenseService} = require('../services');
+const {User} = require('../models');
+const {validate} = require('../middlewares');
 
 const router = Router();
 
@@ -7,25 +9,38 @@ router.get('/create', (req, res) => {
     res.render('expenses/create');
 });
 
-router.post('/create', (req, res, next) => {
+router.post('/create', validate.expense.create, (req, res, next) => {
 
-    console.log(req.body);
+        const userId = req.user.id;
+        expenseService.create(req.body, userId)
+            .then((expense) => {
+                return User.updateOne({_id: userId}, {$push: {expenses: expense._id}});
+            })
+            .then(() => {
+                res.redirect('/');
+            })
+            .catch(next);
 
-    expenseService.create(req.body)
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch(next);
-});
+    }
+);
 
 router.get('/details/:expenseId', (req, res, next) => {
     const expenseId = req.params.expenseId;
     expenseService.getById(expenseId)
         .then((expense) => {
+            console.log(expense);
             res.render('expenses/details', {...expense});
         })
         .catch(next);
-    res.render('expenses/create');
+});
+
+router.get('/delete/:expenseId', (req, res, next) => {
+    const expenseId = req.params.expenseId;
+    expenseService.remove(expenseId)
+        .then(() => {
+            res.redirect('/');
+        })
+        .catch(next);
 });
 
 module.exports = router;

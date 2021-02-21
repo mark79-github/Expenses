@@ -32,11 +32,13 @@ router.get('/register', isGuest, (req, res) => {
 
 router.post('/register', isGuest, validate.user.register, (req, res) => {
     // // register + login
+    console.log(req.body);
     userService.register(req.body)
         .then(() => {
             return userService.login(req.body)
         })
         .then((token) => {
+            console.log('token', token);
             if (!token) {
                 throw {message: msg.WRONG_CREDENTIALS};
             }
@@ -62,6 +64,22 @@ router.post('/register', isGuest, validate.user.register, (req, res) => {
 router.get('/logout', isLogged, (req, res) => {
     res.clearCookie(config.authCookie);
     res.redirect('/users/login');
+});
+
+router.get('/profile', isLogged, (req, res, next) => {
+    userService.getById(req.user.id)
+        .then((user) => {
+            res.render('users/profile', {...user});
+        })
+        .catch(next);
+});
+
+router.post('/fill', isLogged, (req, res, next) => {
+    userService.reFill(req.user.id, req.body)
+        .then(() => {
+            res.redirect('/');
+        })
+        .catch(next);
 });
 
 module.exports = router;

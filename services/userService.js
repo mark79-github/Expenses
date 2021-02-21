@@ -3,25 +3,46 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const {msg} = require('../config/constants');
 
-// const bcrypt = require('bcrypt');
+function getUserById(userId) {
+    return User.findById(userId);
+}
 
-async function register(data) {
+function getById(userId) {
+    return User
+        .findById(userId)
+        .populate('expenses')
+        .lean()
+        .map((x) => {
+            x.totalAmount = x.expenses.reduce((acc, value) => {
+                acc += Number(value.total);
+                return acc;
+            }, 0).toFixed(2);
+            x.amount = x.amount.toFixed(2);
+            return x;
+        });
+}
 
-    let {username, password} = data;
+function reFill(userId, data) {
+    const {amount} = data;
+    return User.findById(userId)
+        .then((user) => {
+            user.amount += Number(amount);
+            return user.save();
+        });
+}
+
+function register(data) {
+    let {username, password, amount} = data;
     username = username.toLowerCase().trim();
+    amount = Number(amount);
 
-    // let user = await User.findOne({username});
-    // if (user) throw {message: 'Username is in use'};
-    //
-    // user = new User({username, password});
-    // return user.save();
-
-    await User.findOne({username})
+    return User.findOne({username})
         .then((user) => {
             if (user) {
                 throw {message: msg.USERNAME_IS_IN_USE(username)}
             }
-            return new User({username, password}).save();
+
+            return new User({username, password, amount}).save();
         });
 }
 
@@ -29,23 +50,6 @@ function login(data) {
 
     let {username, password} = data;
     username = username.toLowerCase().trim();
-
-    // let user = await User.findOne({username}) || {};
-    // let isMatch = await bcrypt.compare(password, user.password || '');
-    //
-    // if (!user || !isMatch) {
-    //     throw {message: 'Wrong username and/or password'}
-    // }
-    // return jwt.sign({id: user._id, username: user.username}, config.secret, {expiresIn: "1h"});
-
-    // return User.findOne({username})
-    //     .then((user) => {
-    //         if (bcrypt.compareSync(password, user.password || '')) {
-    //             return jwt.sign({id: user._id, username: user.username}, config.secret, {expiresIn: "60s"});
-    //         } else {
-    //             return '';
-    //         }
-    //     });
 
     return User.findOne({username})
         .then((user) => {
@@ -65,5 +69,8 @@ function login(data) {
 
 module.exports = {
     register,
-    login
+    login,
+    getById,
+    reFill,
+    getUserById,
 }
