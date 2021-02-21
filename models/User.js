@@ -8,12 +8,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        // validate: constants.USERNAME_REGEX,
     },
     password: {
         type: String,
         required: true,
-    }
+    },
+    amount: {
+        type: Number,
+        required: true,
+        min: 0,
+        default: 0,
+    },
+    expenses: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Expense'
+        }
+    ]
 });
 
 userSchema.pre('save', function (next) {

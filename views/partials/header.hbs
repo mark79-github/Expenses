@@ -5,10 +5,22 @@
                 <a id="home" class="left-floated" href="/">MoneyGone</a>
             </li>
         </ul>
-        <ul>
-            <li>
-                <a class="right-floated" href="/users/login">Login</a>
-            </li>
-        </ul>
+        {{#if isLogged}}
+            <ul>
+                <li>
+                    <a class="right-floated" href="/profile">{{username}}</a>
+                </li>
+
+                <li>
+                    <a class="right-floated" href="/users/logout">Logout</a>
+                </li>
+            </ul>
+        {{else}}
+            <ul>
+                <li>
+                    <a class="right-floated" href="/users/login">Login</a>
+                </li>
+            </ul>
+        {{/if}}
     </nav>
 </header>

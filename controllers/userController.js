@@ -12,24 +12,14 @@ router.get('/login', isGuest, (req, res) => {
 
 router.post('/login', isGuest, validate.user.login, (req, res) => {
 
-    const cookieOptions = {maxAge: 1000 * 60 * 60, httpOnly: true}
-
-    // try {
-    //     let token = userService.login(req.body);
-    //     res.cookie(config.authCookie, token, cookieOptions);
-    //     res.redirect('/products');
-    // } catch (error) {
-    //     res.render('users/login', {message: error.message});
-    // }
-
     userService.login(req.body)
         .then((token) => {
             if (!token) {
                 throw {message: msg.WRONG_CREDENTIALS};
             }
-            return res
-                .cookie(config.authCookie, token, cookieOptions)
-                .redirect('/');
+            const cookieOptions = {maxAge: 1000 * 60 * 60, httpOnly: true}
+            res.cookie(config.authCookie, token, cookieOptions);
+            return res.redirect('/');
         })
         .catch((error) => {
             res.render('users/login', {message: error.message});
@@ -41,38 +31,31 @@ router.get('/register', isGuest, (req, res) => {
 });
 
 router.post('/register', isGuest, validate.user.register, (req, res) => {
-    // try {
-    //     await userService.register(req.body);
-    //     res.redirect('/users/login');
-    // } catch (err) {
-    //     res.render('users/register', {message: err.message});
-    // }
-
     // // register + login
-    // userService.register(req.body)
-    //     .then(() => {
-    //         return userService.login(req.body)
-    //     })
-    //     .then((token) => {
-    //         if (!token) {
-    //             throw {message: msg.WRONG_CREDENTIALS};
-    //         }
-    //         const cookieOptions = {maxAge: 1000 * 60 * 60, httpOnly: true}
-    //         res.cookie(config.authCookie, token, cookieOptions);
-    //         return res.redirect('/');
-    //     })
-    //     .catch(error => {
-    //         res.render('users/register', {message: error.message});
-    //     });
-
-    // only register
     userService.register(req.body)
         .then(() => {
-            res.redirect('/users/login');
+            return userService.login(req.body)
+        })
+        .then((token) => {
+            if (!token) {
+                throw {message: msg.WRONG_CREDENTIALS};
+            }
+            const cookieOptions = {maxAge: 1000 * 60 * 60, httpOnly: true}
+            res.cookie(config.authCookie, token, cookieOptions);
+            return res.redirect('/');
         })
         .catch(error => {
             res.render('users/register', {message: error.message});
         });
+
+    // only register
+    // userService.register(req.body)
+    //     .then(() => {
+    //         res.redirect('/users/login');
+    //     })
+    //     .catch(error => {
+    //         res.render('users/register', {message: error.message});
+    //     });
 
 });
 

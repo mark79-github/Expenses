@@ -1,7 +1,7 @@
 module.exports = {
     constants: {
-        USERNAME_MIN_LENGTH: 5,
-        PASSWORD_MIN_LENGTH: 5,
+        USERNAME_MIN_LENGTH: 4,
+        PASSWORD_MIN_LENGTH: 4,
         USERNAME_REGEX: /^[A-Za-z0-9]+$/,
         PASSWORD_REGEX: /^[A-Za-z0-9]+$/,
     },
