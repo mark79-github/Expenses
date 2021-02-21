@@ -1,10 +1,12 @@
 const {Expense, User} = require('../models');
+const getCategoryViewName = require('../utils/category');
 
 function getById(expenseId) {
     return Expense
         .findById(expenseId).lean()
         .map(x => {
             x.total = x.total.toFixed(2);
+            x.category = getCategoryViewName(x.category) || 'unknown';
             return x;
         });
 }

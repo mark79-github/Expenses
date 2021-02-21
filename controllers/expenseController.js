@@ -1,6 +1,5 @@
 const {Router} = require('express');
 const {expenseService} = require('../services');
-const {User} = require('../models');
 const {validate} = require('../middlewares');
 
 const router = Router();

@@ -1,5 +1,7 @@
 const {Router} = require('express');
 const {expenseService} = require('../services');
+const getCategoryViewName = require('../utils/category');
+
 
 const router = Router();
 
@@ -11,6 +13,7 @@ router.get('/', (req, res, next) => {
             .then((expenses) => {
                 expenses.forEach(x => {
                     x.total = x.total.toFixed(2);
+                    x.category = getCategoryViewName(x.category) || 'unknown';
                 })
                 res.render('home/home', {expenses});
             })
