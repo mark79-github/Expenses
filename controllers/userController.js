@@ -57,7 +57,7 @@ router.get('/profile', isLogged, (req, res, next) => {
     const userId = req.user.id;
     userService.getById(userId)
         .then((user) => {
-            res.render('users/profile', {...user});
+            res.render('users/profile', {...user, username: res.locals.username});
         })
         .catch(next);
 });

@@ -70,7 +70,7 @@ function login(data) {
         })
         .then(([passwordMatches, user]) => {
             if (passwordMatches) {
-                return jwt.sign({id: user._id, username: user.username}, config.privateKey, {expiresIn: "1h"});
+                return jwt.sign({id: user._id, username: data.username}, config.privateKey, {expiresIn: "1h"});
             } else {
                 return null;
             }
